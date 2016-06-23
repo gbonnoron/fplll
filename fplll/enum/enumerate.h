@@ -18,6 +18,7 @@
 #define FPLLL_ENUMERATE_H
 
 #include <array>
+#include <list>
 #include <fplll/gso.h>
 #include <fplll/enum/evaluator.h>
 
@@ -32,8 +33,8 @@ class Enumeration
 public:
     static const int DMAX = MaxDimension;
 
-    Enumeration(MatGSO<Integer, FT>& gso, Evaluator<FT>& evaluator)
-        : _gso(gso), _evaluator(evaluator)
+    Enumeration(MatGSO<Integer, FT>& gso, Evaluator<FT>& evaluator, list<int> maxs=list<int>())
+        : _gso(gso), _evaluator(evaluator), _maxs(maxs)
     {
     }
     
@@ -49,6 +50,7 @@ public:
 private:
     MatGSO<Integer, FT>& _gso; 
     Evaluator<FT>& _evaluator;
+    std::list<int> _maxs;
     
     enumf mut[DMAX][DMAX];
     enumf centerPartSums[DMAX][DMAX];

@@ -365,7 +365,7 @@ int closestVector(IntMatrix& b, const IntVect& intTarget,
           EVALMODE_CV);
 
   // Main loop of the enumeration
-  Enumeration<Float> Enum(gso, evaluator);
+  Enumeration<Float> Enum(gso, evaluator, maxs);
   Enum.enumerate(0, d, maxDist, 0, targetCoord, vector<enumxt>(), vector<enumf>());
 
   int result = RED_ENUM_FAILURE;
