@@ -19,6 +19,8 @@
 #ifndef FPLLL_DEFS_H
 #define FPLLL_DEFS_H
 
+#define DEBUG
+
 #ifndef __CYGWIN__
 #define FPLLL_WITH_LONG_DOUBLE 
 #endif

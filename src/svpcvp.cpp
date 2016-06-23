@@ -14,6 +14,7 @@
    You should have received a copy of the GNU Lesser General Public License
    along with fplll. If not, see <http://www.gnu.org/licenses/>. */
 
+#include <list>
 #include "svpcvp.h"
 #include "enum/enumerate.h"
 #include "enum/topenum.h"
@@ -337,6 +338,27 @@ int closestVector(IntMatrix& b, const IntVect& intTarget,
   for (int i = 1; i < d; i++) {
     // getRExp(i, i) = r(i, i) because gso is initialized without GSO_ROW_EXPO
     maxDist.add(maxDist, gso.getRExp(i, i));
+  }
+
+  // For a proper CVP, we need to reset enum below depth with maximal r_i
+
+  list<int> maxs;
+  int cur, max_index=d;
+  auto max_val = gso.getRExp(d - 1, d - 1);
+
+  while (max_index > 0)
+  {
+    --max_index;
+    max_val = gso.getRExp(max_index, max_index);
+    for (cur = max_index - 1 ; cur >= 0  ; --cur)
+    {
+      if (max_val < gso.getRExp(cur, cur))
+      {
+        max_val = gso.getRExp(cur, cur);
+        max_index = cur;
+      }
+    }
+    maxs.push_back(max_index);
   }
 
   FastEvaluator<Float> evaluator(n, gso.getMuMatrix(), gso.getRMatrix(),

@@ -203,7 +203,7 @@ bool Enumeration<FT,MaxDimension>::enumerateLoop(enumf& newMaxDist)
                     centerPartSums[k][j] = centerPartSums[k][j+1] - x[j] * mut[k][j];
             }
             
-            enumf newCenter = centerPartSums[k][k+1];
+            enumf newCenter = centerPartSum[k] + centerPartSums[k][k+1];
             if (k > 0)
             {
                 centerLoopBg[k-1] = max(centerLoopBg[k-1], centerLoopBg[k]);
