@@ -342,14 +342,15 @@ int closestVector(IntMatrix& b, const IntVect& intTarget,
 
   // For a proper CVP, we need to reset enum below depth with maximal r_i
 
-  list<int> maxs;
-  int cur, max_index=d;
+  //find the indices of the maxs
+  vector<Float> max_dists(d, 0);
+  vector<int> max_indices(d);
+  int cur, max_index=d, previous_max_index=d;
   auto max_val = gso.getRExp(d - 1, d - 1);
 
   while (max_index > 0)
   {
-    --max_index;
-    max_val = gso.getRExp(max_index, max_index);
+    previous_max_index = --max_index;
     for (cur = max_index - 1 ; cur >= 0  ; --cur)
     {
       if (max_val < gso.getRExp(cur, cur))
@@ -358,14 +359,32 @@ int closestVector(IntMatrix& b, const IntVect& intTarget,
         max_index = cur;
       }
     }
-    maxs.push_back(max_index);
+    for (cur = max_index ; cur <= previous_max_index ; ++cur)
+      max_indices[cur] = max_index;
   }
+
+  int i = 0;
+  Float cur_dist = 0;
+  while (i < d)
+  {
+    int max = i;
+    while (max_indices[i] == max_indices[max])
+    {
+        cur_dist += gso.getRExp(i, i);
+        ++i;
+    }
+    for (int j = max ; j < i ; ++j)
+        max_dists[j] = cur_dist;
+  }
+
+  //FPLLL_TRACE("max_indices" << max_indices);
+  //FPLLL_TRACE("max_dists" << max_dists);
 
   FastEvaluator<Float> evaluator(n, gso.getMuMatrix(), gso.getRMatrix(),
           EVALMODE_CV);
 
   // Main loop of the enumeration
-  Enumeration<Float> Enum(gso, evaluator, maxs);
+  Enumeration<Float> Enum(gso, evaluator, max_indices);
   Enum.enumerate(0, d, maxDist, 0, targetCoord, vector<enumxt>(), vector<enumf>());
 
   int result = RED_ENUM_FAILURE;

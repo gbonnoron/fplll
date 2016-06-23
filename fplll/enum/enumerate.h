@@ -33,7 +33,7 @@ class Enumeration
 public:
     static const int DMAX = MaxDimension;
 
-    Enumeration(MatGSO<Integer, FT>& gso, Evaluator<FT>& evaluator, list<int> maxs=list<int>())
+    Enumeration(MatGSO<Integer, FT>& gso, Evaluator<FT>& evaluator, vector<int> maxs=vector<int>())
         : _gso(gso), _evaluator(evaluator), _maxs(maxs)
     {
     }
@@ -50,7 +50,7 @@ public:
 private:
     MatGSO<Integer, FT>& _gso; 
     Evaluator<FT>& _evaluator;
-    std::list<int> _maxs;
+    vector<int> _maxs;
     
     enumf mut[DMAX][DMAX];
     enumf centerPartSums[DMAX][DMAX];
