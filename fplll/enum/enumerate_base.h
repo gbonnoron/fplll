@@ -18,6 +18,7 @@
 #ifndef FPLLL_ENUMERATE_BASE_H
 #define FPLLL_ENUMERATE_BASE_H
 
+#include <vector>
 #include <array>
 #include <cfenv>
 #include <cmath>
@@ -58,25 +59,45 @@ public:
     
     inline uint64_t get_nodes() const { return nodes; }
     virtual ~EnumerationBase() {}
+    EnumerationBase()
+    {
+        mut.resize(maxdim);
+        for (int i=0 ; i<maxdim ; ++i) mut[i].resize(maxdim);
+        rdiag.resize(maxdim);
+        partdistbounds.resize(maxdim);
 
+        center_partsums.resize(maxdim);
+        for (int i=0 ; i<maxdim ; ++i) center_partsums[i].resize(maxdim);
+        center_partsum.resize(maxdim);
+        center_partsum_begin.resize(maxdim);
+
+        partdist.resize(maxdim);
+        center.resize(maxdim);
+        alpha.resize(maxdim);
+        x.resize(maxdim);
+        dx.resize(maxdim);
+        ddx.resize(maxdim);
+        subsoldists.resize(maxdim);
+    }
+            
 protected:
     /* configuration */
     bool dual;
 
     /* enumeration input */
-    enumf mut[maxdim][maxdim];
-    array<enumf, maxdim> rdiag, partdistbounds;
+    vector< vector<enumf> > mut;
+    vector<enumf> rdiag, partdistbounds;
     int d, k_end; // dimension, subtreelevel
 
     /* partial sum cache */
-    enumf center_partsums[maxdim][maxdim];
-    array<enumf, maxdim> center_partsum;
-    array<int,   maxdim> center_partsum_begin;
+    vector< vector<enumf> > center_partsums;
+    vector<enumf> center_partsum;
+    vector<int> center_partsum_begin;
 
     /* enumeration data for each level */
-    array<enumf, maxdim> partdist, center, alpha;
-    array<enumxt,maxdim> x, dx, ddx;
-    array<enumf, maxdim> subsoldists;
+    vector<enumf> partdist, center, alpha;
+    vector<enumxt> x, dx, ddx;
+    vector<enumf> subsoldists;
     
     int k, k_max;
    
